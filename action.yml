@@ -1,0 +1,19 @@
+name: Assign Author
+author: MichinaoShimizu
+description: If assinee is not set assign author to assignee.
+runs:
+  using: composite
+  steps:
+    - name: assign author of pull_request
+      shell: bash
+      run: gh pr edit ${{ github.event.pull_request.number }} -R "${{ github.repository }}" --add-assignee "${{ github.actor }}"
+      env:
+        GH_TOKEN: ${{ github.token }}
+      if: github.event_name == 'pull_request' && toJSON(github.event.pull_request.assignees) == '[]' && github.actor != 'dependabot[bot]' && github.actor != 'github-actions[bot]'
+
+    - name: assign author of issue
+      shell: bash
+      run: gh issue edit ${{ github.event.issue.number }} -R "${{ github.repository }}" --add-assignee "${{ github.actor }}"
+      env:
+        GH_TOKEN: ${{ github.token }}
+      if: github.event_name == 'issues' && toJSON(github.event.issue.assignees) == '[]' && github.actor != 'github-actions[bot]'
