@@ -1,6 +1,7 @@
 name: Assign Author
 author: MichinaoShimizu
-description: If assinee is not set assign author to assignee.
+description: Github Action that sets author to assignee when assignee is not set in issue or pull_request.
+
 runs:
   using: composite
   steps:
@@ -17,3 +18,7 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       if: github.event_name == 'issues' && toJSON(github.event.issue.assignees) == '[]' && github.actor != 'github-actions[bot]'
+
+branding:
+  icon: "sun"
+  color: "orange"
